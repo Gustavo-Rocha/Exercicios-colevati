@@ -1,6 +1,9 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -17,37 +20,155 @@ public class RedesController
 	
 	public void ip(String so) throws UnknownHostException
 	{
-		Enumeration nis = null;
-		try 
+		String winIp= "ipconfig /all";
+		String linIp="ip addr show";
+		
+		if(so.startsWith("W"))
 		{
-			nis = NetworkInterface.getNetworkInterfaces();	
-		}
-		catch (SocketException e) {
-			e.printStackTrace();
-		}  
-		while (nis.hasMoreElements()) {  
-			NetworkInterface ni = (NetworkInterface) nis.nextElement();  
-			Enumeration ias = ni.getInetAddresses();  
-			while (ias.hasMoreElements()) {  
-				InetAddress ia = (InetAddress) ias.nextElement();  
-				System.out.println(ni.getName() +" ip: "  + ia.getHostAddress() + "    hostname:"  + ia.getHostName());   
-			}  
+			try
+			{
+			
+				Process proc= Runtime.getRuntime().exec(winIp);
+				InputStream fluxo = proc.getInputStream();
+				InputStreamReader leitor =new InputStreamReader(fluxo);
+				BufferedReader buffer = new BufferedReader(leitor);
+				String linha=buffer.readLine();
+				
+				while(linha != null)
+				{
+					if(linha.contains("IPv4"))
+					{
+						System.out.println(linha.toString());
+						
+					}
+					else if(linha.contains("Descri"))
+					{
+						System.out.println(linha.toString());
+					}
+					
+					linha=buffer.readLine();
+					
+				}
+				
+			}
+			
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+		
 		}
 		
+		else if(so.startsWith("L"))
+		{
+			try
+			{
+				Process proc =Runtime.getRuntime().exec(linIp);
+				InputStream fluxo= proc.getInputStream();
+				InputStreamReader leitor = new InputStreamReader(fluxo);
+				BufferedReader buffer =new BufferedReader(leitor);
+				String linha=buffer.readLine();
+				
+				while(linha !=null)
+				{
+					if(linha.contains("IPv4"))
+					{
+						System.out.println(linha.toString());
+					}
+					
+					else if(linha.contains("Descri"))
+					{
+						System.out.println(linha.toString());
+					}
+					
+					linha=buffer.readLine();
+				}
+						
+			}
+			
+			catch( IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			
+		}
 		
 	}
 	
 	public void ping(String os)
 	{
-		String site= " ping -t www.google.com.br";
-		try
-		{
-			Runtime.getRuntime().exec(site);
-		}
+		String wPing= " ping www.google.com.br -n 10 ";
+		String lPing="ping www.google.com.br -c 10";
 		
-		catch(IOException e)
+		if(os.startsWith("W"))
 		{
-			e.printStackTrace();
+			try
+			{
+				Process proc =Runtime.getRuntime().exec(wPing);
+				InputStream fluxo = proc.getInputStream();
+				InputStreamReader leitor = new InputStreamReader(fluxo);
+				BufferedReader buffer = new BufferedReader(leitor);
+				String linha = buffer.readLine();
+				//String fil[]=linha.split("");
+				//System.out.println(linha);
+				
+				
+				while(linha !=null)
+				{
+					if(linha.trim().contains("M¡nimo "))
+					{
+						System.out.println(linha.toString());
+					}		
+					else
+					{
+						System.out.println(linha.toString());
+					}
+					
+					linha=buffer.readLine();
+				}
+			}
+			
+			catch( IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		else if(os.startsWith("L"))
+		{
+			
+			try {
+				Process proc = Runtime.getRuntime().exec(lPing);
+				InputStream fluxo = proc.getInputStream();
+				InputStreamReader leitor = new InputStreamReader(fluxo);
+				BufferedReader buffer =new BufferedReader (leitor);
+				String linha= buffer.readLine();
+				//String fil[]=linha.split("");
+				//System.out.println(fil[2]);
+				
+				
+				while(linha !=null)
+				{
+					if(linha.contains("Resposta"))
+					{
+						System.out.println(linha.toString());
+					}
+					
+					else if(linha.contains("Milissegundos"))
+					{
+						System.out.println(linha.toString());
+					}
+					
+					linha=buffer.readLine();
+				}
+						
+				
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			
 		}
 		
 		

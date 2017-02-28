@@ -18,7 +18,7 @@ public class Main {
 		
 		while(opc!=9)
 		{
-			opc=Integer.parseInt(JOptionPane.showInputDialog("digite uma opção: \n 1-Obter o IP \n 2-Obter o PING"));
+			opc=Integer.parseInt(JOptionPane.showInputDialog("digite uma opção: \n 1-Obter o IP \n 2-Obter o PING \n 9- Sair"));
 			
 			switch (opc)
 			{
@@ -28,9 +28,14 @@ public class Main {
 					
 				break;
 				
-			case 2:
+			case 2:	RedesController r8 = new RedesController();
+					
+					r8.ping(so);
 				break;
-			
+				
+				
+			case 9: System.exit(0);
+				break;
 			}
 		}
 		
