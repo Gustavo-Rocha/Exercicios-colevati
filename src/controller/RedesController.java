@@ -150,7 +150,7 @@ public class RedesController
 				
 				while(linha !=null)
 				{
-					if(linha.contains("Resposta"))
+					if(linha.contains("M¡nimo"))
 					{
 						System.out.println(linha.toString());
 					}
