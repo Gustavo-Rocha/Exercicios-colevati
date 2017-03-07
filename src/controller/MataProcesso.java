@@ -39,7 +39,7 @@ public class MataProcesso
 	{
 		String comando="";
 		
-		if(so=="Linux")
+		if(so.contains("L"))
 		{
 			comando=" ps aux";
 			try 
@@ -98,7 +98,7 @@ public class MataProcesso
 		int pid=0;
 		StringBuffer buffer= new StringBuffer();
 		
-		if(so=="windows")
+		if(so.contains("W"))
 		{
 		
 		try
@@ -122,7 +122,7 @@ public class MataProcesso
 		
 		else
 		{
-			String cmdPidL = "KILL /PID ";
+			String cmdPidL = "KILL  ";
 			int pidL=0;
 			 try
 			 {
@@ -135,6 +135,60 @@ public class MataProcesso
 				
 				{
 					buffer.append(cmdNome);
+					buffer.append(comando);
+				}
+				
+				iniciaProcesso(buffer.toString());
+			
+			
+		}
+		
+	}
+	
+	public void mataPNome(String so,String comando)
+	{
+		
+		String cmdNome= "TASKKILL /IM ";
+		//int pid=0;
+		StringBuffer buffer= new StringBuffer();
+		String process;
+		if(so.contains("W"))
+		{
+		
+		try
+		{
+			process=comando;
+			buffer.append(cmdNome);
+			buffer.append(process);
+			
+		}
+		
+		catch(NumberFormatException e)
+		
+		{
+			buffer.append(cmdNome);
+			buffer.append(comando);
+		}
+		
+		iniciaProcesso(buffer.toString());
+		
+		}
+		
+		else
+		{
+			String cmdNomeL = "ps -ef | grep";
+			String pidL;
+			 try
+			 {
+				 pidL=comando;
+				 buffer.append(cmdNomeL);
+				 buffer.append(pidL);
+			 }
+			 
+			 catch(NumberFormatException e)
+				
+				{
+					buffer.append(cmdNomeL);
 					buffer.append(comando);
 				}
 				
